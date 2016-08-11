@@ -11,13 +11,10 @@ Classes and functions for building TensorFlow graphs.
 
 ### `class tf.Graph` {#Graph}
 
-A TensorFlow computation, represented as a dataflow graph.
+데이터 흐름을 그래프로 표현한 TensorFlow 연산.
 
-A `Graph` contains a set of
-[`Operation`](../../api_docs/python/framework.md#Operation) objects,
-which represent units of computation; and
-[`Tensor`](../../api_docs/python/framework.md#Tensor) objects, which represent
-the units of data that flow between operations.
+`Graph` 는 연산의 단위인 [`Operation`](../../api_docs/python/framework.md#Operation) 객체들과,
+[`Operation`](../../api_docs/python/framework.md#Operation) 간의 data 교환 단위인 [`Tensor`](../../api_docs/python/framework.md#Tensor) 객체들을 담고 있다.
 
 A default `Graph` is always registered, and accessible by calling
 [`tf.get_default_graph()`](../../api_docs/python/framework.md#get_default_graph).
