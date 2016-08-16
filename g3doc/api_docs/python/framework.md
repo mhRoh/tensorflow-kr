@@ -8,25 +8,20 @@ Classes and functions for building TensorFlow graphs.
 ## Core graph data structures
 
 - - -
-##TODO 
-  --- Default Graph의 정의에 대해 명확하게 해야 함. Global Default Graph를 의미하는지 아니면, 
-  다른 Graph instance를 지칭하면서, 특정 기능 등이 등록되어 있지 않는 이라는 의미인지...
-  
+
 ### `class tf.Graph` {#Graph}
 
 데이터 흐름을 그래프로 표현한 TensorFlow 연산.
 
 `Graph` 는 연산의 단위인 [`Operation`](../../api_docs/python/framework.md#Operation) 객체들과,
-[`Operation`](../../api_docs/python/framework.md#Operation) 간의 data 교환 단위인 [`Tensor`](../../api_docs/python/framework.md#Tensor) 객체들을 담고 있다.
+[`Operation`](../../api_docs/python/framework.md#Operation) 간의 data 교환 단위인 [`Tensor`](../../api_docs/python/framework.md#Tensor) 객체들을 담는다.
 
-Default `Graph` 는 항상 (개발자의 다른 코드 구현 없이) TensorFlow program 상에 등록이 되며, 
-[`tf.get_default_graph()`](../../api_docs/python/framework.md#get_default_graph) 함수 호출을 통해 접근이 가능하다.
-
-Default `Graph` 에 수행할 작업을 추가하기 위해서는 아래의 코드와 같이 간단하게 
-`Operation`을 정의하는 함수 중 하나를 호출하면 된다.
+[`tf.get_default_graph()`](../../api_docs/python/framework.md#get_default_graph) 함수 호출을 통해 임의의 `default Graph`는  등록되며, 접근이 가능해 진다. `default Graph` 에 수행할 작업을 추가하기 위해서는 아래의 코드와 같이 간단하게 `Operation`을 정의하는 함수 중 하나를 호출하면 된다.
 
 ```
+# 1x1 4.0의 값을 가지는 Tensor를 출력하는 ops를 생성하는 코드. 
 c = tf.constant(4.0)                     
+#get_default_graph()는 현재 Thread Context 상의 default graph를 리턴한다.
 assert c.graph is tf.get_default_graph() 
 ```
 
