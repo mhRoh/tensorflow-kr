@@ -8,7 +8,10 @@ Classes and functions for building TensorFlow graphs.
 ## Core graph data structures
 
 - - -
-
+##TODO 
+  --- Default Graph의 정의에 대해 명확하게 해야 함. Global Default Graph를 의미하는지 아니면, 
+  다른 Graph instance를 지칭하면서, 특정 기능 등이 등록되어 있지 않는 이라는 의미인지...
+  
 ### `class tf.Graph` {#Graph}
 
 데이터 흐름을 그래프로 표현한 TensorFlow 연산.
@@ -16,39 +19,35 @@ Classes and functions for building TensorFlow graphs.
 `Graph` 는 연산의 단위인 [`Operation`](../../api_docs/python/framework.md#Operation) 객체들과,
 [`Operation`](../../api_docs/python/framework.md#Operation) 간의 data 교환 단위인 [`Tensor`](../../api_docs/python/framework.md#Tensor) 객체들을 담고 있다.
 
-A default `Graph` is always registered, and accessible by calling
-[`tf.get_default_graph()`](../../api_docs/python/framework.md#get_default_graph).
-To add an operation to the default graph, simply call one of the functions
-that defines a new `Operation`:
+Default `Graph` 는 항상 (개발자의 다른 코드 구현 없이) TensorFlow program 상에 등록이 되며, 
+[`tf.get_default_graph()`](../../api_docs/python/framework.md#get_default_graph) 함수 호출을 통해 접근이 가능하다.
+
+Default `Graph` 에 수행할 작업을 추가하기 위해서는 아래의 코드와 같이 간단하게 
+`Operation`을 정의하는 함수 중 하나를 호출하면 된다.
 
 ```
-c = tf.constant(4.0)
-assert c.graph is tf.get_default_graph()
+c = tf.constant(4.0)                     
+assert c.graph is tf.get_default_graph() 
 ```
 
-Another typical usage involves the
-[`Graph.as_default()`](../../api_docs/python/framework.md#Graph.as_default)
-context manager, which overrides the current default graph for the
-lifetime of the context:
+또 다른 일반적인 Default `Graph`에 대한 접근 방법은, 하기의 코드처럼  [`Graph.as_default()`](../../api_docs/python/framework.md#Graph.as_default) 을 이용하는 것이다.
 
 ```python
-g = tf.Graph()
-with g.as_default():
-  # Define operations and tensors in `g`.
-  c = tf.constant(30.0)
-  assert c.graph is g
+g = tf.Graph()                            #새로운 `Graph` g 를 생성
+with g.as_default():                      #`Graph` g를 context manager를 통해 `default graph`로 변경
+  c = tf.constant(30.0)                   #g 상에 opeartion 및 tensor를 정의.
+  assert c.graph is g                     #ops c의 graph instance와 g가 다를 경우 assert.
 ```
 
-Important note: This class *is not* thread-safe for graph construction. All
-operations should be created from a single thread, or external
-synchronization must be provided. Unless otherwise specified, all methods
-are not thread-safe.
+중요 사항: `Graph` 클래스는 graph 생성에 대해 `thead-safe` 하지 않다. 모든 `operations` 은
+같은 Thread 상에서 생성이 되거나, 외적인 동기화가 무조건 제공되어야 한다. 그렇지 않다면, 특수한
+경우를 제외하고, 모든 함수들은 동시성 문제로 부터 자유로울 수 없다.
 
 - - -
 
 #### `tf.Graph.__init__()` {#Graph.__init__}
 
-Creates a new, empty Graph.
+비어있는 새로운 `Graph` 생성
 
 
 - - -
