@@ -3,7 +3,7 @@
 # Building Graphs
 [TOC]
 
-Classes and functions for building TensorFlow graphs.
+TensorFlow 그래프 생성을 위한 클래스와 함수들.
 
 ## Core graph data structures
 
@@ -16,21 +16,21 @@ Classes and functions for building TensorFlow graphs.
 `Graph` 는 연산의 단위인 [`Operation`](../../api_docs/python/framework.md#Operation) 객체들과,
 [`Operation`](../../api_docs/python/framework.md#Operation) 간의 data 교환 단위인 [`Tensor`](../../api_docs/python/framework.md#Tensor) 객체들을 담는다.
 
-[`tf.get_default_graph()`](../../api_docs/python/framework.md#get_default_graph) 함수 호출을 통해 임의의 `default Graph`는  등록되며, 접근이 가능해 진다. `default Graph` 에 수행할 작업을 추가하기 위해서는 아래의 코드와 같이 간단하게 `Operation`을 정의하는 함수 중 하나를 호출하면 된다.
+[`tf.get_default_graph()`](../../api_docs/python/framework.md#get_default_graph) 함수 호출을 통해 `default Graph`는  등록되며, 접근이 가능해 진다. `default Graph` 에 수행할 작업을 추가하기 위해서는 아래의 코드와 같이 간단하게 `Operation`을 정의하는 함수 중 하나를 호출하면 된다.
 
 ```
-# 1x1 4.0의 값을 가지는 Tensor를 출력하는 ops를 생성하는 코드. 
+# Rank zero 4.0의 값을 가지는 Tensor를 출력하는 ops를 생성하는 코드. 
 c = tf.constant(4.0)                     
 #get_default_graph()는 현재 Thread Context 상의 default graph를 리턴한다.
 assert c.graph is tf.get_default_graph() 
 ```
 
-또 다른 일반적인 Default `Graph`에 대한 접근 방법은, 하기의 코드처럼  [`Graph.as_default()`](../../api_docs/python/framework.md#Graph.as_default) 을 이용하는 것이다.
+또 다른 일반적인 `default Graph`에 대한 접근 방법은, [`Graph.as_default()`](../../api_docs/python/framework.md#Graph.as_default) 을 통해 context manager를 통해, `default graph`를 가져와 사용하는 것이다.
 
 ```python
 g = tf.Graph()                            #새로운 `Graph` g 를 생성
-with g.as_default():                      #`Graph` g를 context manager를 통해 `default graph`로 변경
-  c = tf.constant(30.0)                   #g 상에 opeartion 및 tensor를 정의.
+with g.as_default():                      #`Graph` g를 context manager를 통해 `default graph`로 override
+  c = tf.constant(30.0)                   # g.as_default() 를 통해 tf.constant(30.0)이 `default graph`에 추가된다.
   assert c.graph is g                     #ops c의 graph instance와 g가 다를 경우 assert.
 ```
 
@@ -49,7 +49,7 @@ with g.as_default():                      #`Graph` g를 context manager를 통�
 
 #### `tf.Graph.as_default()` {#Graph.as_default}
 
-Returns a context manager that makes this `Graph` the default graph.
+`tf.Graph.as_default()`를 호출한 `Graph`를 `default graph`로 만드는 context manager를 반환.
 
 This method should be used if you want to create multiple graphs
 in the same process. For convenience, a global default graph is
