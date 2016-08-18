@@ -25,13 +25,13 @@ c = tf.constant(4.0)
 assert c.graph is tf.get_default_graph() 
 ```
 
-또 다른 일반적인 `default Graph`에 대한 접근 방법은, [`Graph.as_default()`](../../api_docs/python/framework.md#Graph.as_default) 을 통해 context manager를 통해, `default graph`를 가져와 사용하는 것이다.
+또 다른 일반적인 `default Graph`에 대한 접근 방법은, [`Graph.as_default()`](../../api_docs/python/framework.md#Graph.as_default) 로 부터 반환되는 context manager를 통해,  새로 생성된 graph를 `default graph`로 재정의하여 사용하는 것이다.
 
 ```python
 g = tf.Graph()                            #새로운 `Graph` g 를 생성
-with g.as_default():                      #`Graph` g를 context manager를 통해 `default graph`로 override
-  c = tf.constant(30.0)                   # g.as_default() 를 통해 tf.constant(30.0)이 `default graph`에 추가된다.
-  assert c.graph is g                     #ops c의 graph instance와 g가 다를 경우 assert.
+with g.as_default():                      #`Graph` g를 context manager를 통해 `default graph`로 재정의
+  c = tf.constant(30.0)                   # operation tf.constant(30.0)은 `g graph`에 추가된다.
+  assert c.graph is g                     # ops c의 graph instance와 g가 다를 경우 assert.
 ```
 
 중요 사항: `Graph` 클래스는 graph 생성에 대해 `thead-safe` 하지 않다. 모든 `operations` 은
@@ -51,19 +51,17 @@ with g.as_default():                      #`Graph` g를 context manager를 통�
 
 `tf.Graph.as_default()`를 호출한 `Graph`를 `default graph`로 만드는 context manager를 반환.
 
-This method should be used if you want to create multiple graphs
-in the same process. For convenience, a global default graph is
-provided, and all ops will be added to this graph if you do not
-create a new graph explicitly. Use this method with the `with` keyword
-to specify that ops created within the scope of a block should be
-added to this graph.
+같은 process 내에서 다수의 graph를 생성하려 한다면, 이 함수를 사용하여야 한다.
+새로운 graph를 명확하게 생성하지 않았다면, 이 함수는 전역 default graph 를 반환하게 되며, 
+모든 operations 는 반환된 graph에 추가된다. `with` 키워드와 함께 이 함수를 사용하면, 
+해당 scope(Python의 `with`로 정의되는 문맥범위) 내에서 생성된 operations는 반환된 graph에 
+추가된다.
 
-The default graph is a property of the current thread. If you
-create a new thread, and wish to use the default graph in that
-thread, you must explicitly add a `with g.as_default():` in that
-thread's function.
+`default graph` 는 현 thread 에 국한된 자원이다. 만약 새로운 thread 를 생성하고, 그 안에서 
+`default graph` 를 사용하고 싶다면 명확하게 `with g.as_default():` 를 thread의 함수에서 사용
+해야한다.
 
-The following code examples are equivalent:
+아래의 두 코드는 같은 동작을 한다.
 
 ```python
 # 1. Using Graph.as_default():
@@ -79,10 +77,8 @@ with tf.Graph().as_default() as g:
 ```
 
 ##### Returns:
-
-  A context manager for using this graph as the default graph.
-
-
+  `as_default()` 를 호출한 `graph`를 `default graph`처럼 사용하기 위한 contenxt manager를 반환
+  
 - - -
 
 #### `tf.Graph.as_graph_def(from_version=None, add_shapes=False)` {#Graph.as_graph_def}
