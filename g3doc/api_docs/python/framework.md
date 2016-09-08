@@ -83,13 +83,11 @@ with tf.Graph().as_default() as g:
 
 #### `tf.Graph.as_graph_def(from_version=None, add_shapes=False)` {#Graph.as_graph_def}
 
-Returns a serialized `GraphDef` representation of this graph.
+직렬화 된 `GraphDef` 표현을 반환한다.
 
-The serialized `GraphDef` can be imported into another `Graph`
-(using [`import_graph_def()`](#import_graph_def)) or used with the
-[C++ Session API](../../api_docs/cc/index.md).
-
-This method is thread-safe.
+([`import_graph_def()`](#import_graph_def))를 통하거나, [C++ Session API](../../api_docs/cc/index.md)를 통해
+직렬화 된 `GraphDef`은 다른 `Graph`에 수용되어 질 수 있다.
+이 함수는 `thread-safe` 하다.
 
 ##### Args:
 
